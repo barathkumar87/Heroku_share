@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <link  rel= "stylesheet" type="text/css" href="css/displayMessagestyle.css">
+    <div class="promo">
+        <h1 class="head">Here is your Message</h1>
+
+        <p id="Counter"></p>
+<div class="msg">
+        <p class="message"><%= message %></p> 
+    </div>
+    </div>
+    <br><br>
+   <a href="https://github.com/barathkumar87/Share"><i class="fa fa-github" style="font-size:36px"></i>  Share</a> 
+	
+</body>
+
+
+<script>
+     var secLeft = "<%= time %> ";
+     var t = secLeft;
+    var x = setInterval(function() {
+
+
+       
+        
+        if(t < 0){
+            document.getElementById("Counter").innerText="Link Expired";
+        }
+        else{
+           t = t-1;
+            document.getElementById("Counter").innerText="Expires after   ";
+            document.getElementById("Counter").innerText+= " :  ";
+            document.getElementById("Counter").innerText+=t-1;
+            document.getElementById("Counter").innerText+=" sec";
+
+
+        }
+
+    },1000);
+</script>
+</html>
