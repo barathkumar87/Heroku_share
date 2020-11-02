@@ -139,7 +139,7 @@ function showModal(link){
 
 	var parent_div = document.getElementsByClassName("textdiv"); 
 
-	make_link = "http://localhost:3000/"+link;
+	make_link = "https://shareapp-app.herokuapp.com/"+link;
 	var aTag = document.createElement("a");
 	aTag.href = make_link;
 	aTag.innerText=make_link;
@@ -162,7 +162,7 @@ function submitForm() {
           return;
         }
 
-        fetch('http://localhost:3000/postData', {
+        fetch('https://shareapp-app.herokuapp.com/postData', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
