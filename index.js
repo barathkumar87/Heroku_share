@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.static(__dirname + "/public"));
 app.set('view engine', 'ejs');
 
-var url = process.env.MONGOLAB_URI;
+var url = process.env.MONGOOSE_URI;
 mongoose.connect(url, function (err) {
   if (err) throw err;
   console.log("successfully connected");
