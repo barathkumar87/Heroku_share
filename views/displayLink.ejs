@@ -8,8 +8,59 @@
     <title>Document</title>
 </head>
 <body>
-    <link  rel= "stylesheet" type="text/css" href="css/displayLinkstyle.css">
-    <div class="promo">
+  <style>
+  html,body{
+    background: linear-gradient(147deg, #b777d6, #b8bd35);
+    margin:0px;
+    border:0px;
+    height:100%;
+    width:100%;
+    overflow: hidden;
+}
+
+.promo{
+    font-family: monospace;
+    color: #a9ca74;
+    font-size: 30px;
+}
+
+
+.head{text-align: center;background: linear-gradient(181deg, #4a7694, #9b94bd);/* padding-left: 400px; */color:white;}
+
+.message{
+    font-size: 60px;
+    border: 10px;
+    /* background: linear-gradient(147deg, #b777d6, #b8bd35); */
+    /* padding-left: 320px; */
+    color: #101010;
+    /* border-color: red; */
+    margin: 10px;
+    border-radius: 30px;
+    /* height: 100%; */
+    /* background: cadetblue; */
+    font-family: monospace;
+    font-weight: 900;
+    align-content: center;
+    text-align: center;
+}
+
+
+.aTag{align-content: center;font-family: monospace;color: #fff !important;text-decoration: none;font-size: 38px;padding-left: 645px;padding-top: 30px;text-align: center;align-items: center;}
+
+
+.msg{
+    /* width: inherit; */
+    /* border-bottom-color: pink; */
+    /* border-style: ridge; */
+}
+
+.message :hover{
+    color:pink;
+}
+
+
+  </style>
+  <div class="promo">
         <h1 class="head">Here is your Link</h1>
 <div class="msg">
         <p class="message"><a href="<%= message %>" ><%= message %></a> </p>
