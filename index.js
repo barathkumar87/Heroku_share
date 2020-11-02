@@ -7,7 +7,8 @@ app.use(express.json());
 app.use(express.static(__dirname + "/public"));
 app.set('view engine', 'ejs');
 
-mongoose.connect("mongodb://shareapp-app.herokuapp.com/mongoose_basic", function (err) {
+var url = process.env.MONGOLAB_URI;
+mongoose.connect(url, function (err) {
   if (err) throw err;
   console.log("successfully connected");
 });
