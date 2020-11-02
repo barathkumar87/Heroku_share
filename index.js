@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.static(__dirname + "/public"));
 app.set('view engine', 'ejs');
 
-mongoose.connect("mongodb://localhost/mongoose_basic", function (err) {
+mongoose.connect("mongodb://shareapp-app.herokuapp.com/mongoose_basic", function (err) {
   if (err) throw err;
   console.log("successfully connected");
 });
@@ -130,7 +130,7 @@ app.get("/:link", function (req, res) {
 // Add headers
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "https://shareapp-app.herokuapp.com/");
 
   // Request methods you wish to allow
   res.setHeader(
@@ -152,6 +152,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.listen(3000, "localhost", () => {
-  console.log("Server is up");
-});
+// app.listen(3000, "localhost", () => {
+//   console.log("Server is up");
+// });
+
+let port_number = server.listen(process.env.PORT || 3000);
+app.listen(port_number);
