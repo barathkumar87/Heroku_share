@@ -5,7 +5,7 @@ let app = express();
 
 app.use(express.json());
 app.use(express.static(__dirname + "/public"));
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 var url = process.env.MONGOOSE_URI;
 mongoose.connect(url, function (err) {
@@ -15,12 +15,21 @@ mongoose.connect(url, function (err) {
 
 let shareSchema = mongoose.Schema({
   message: String,
-  ttl: Number, 
+  ttl: Number,
   link: String,
   type: String,
+  username: String,
+});
+
+let userSchema = mongoose.Schema({
+  username: String,
+  password: String,
+  email: String,
 });
 
 let share = mongoose.model("share", shareSchema);
+
+let user = mongoose.model("users", userSchema);
 
 // generate random
 function generateRand(x) {
@@ -54,24 +63,23 @@ async function generateLink() {
   return randiom;
 }
 
-
 app.get("/", function (req, res) {
-    res.sendFile("index.html", { root: "./frontend" });
-  });
-  
+  res.sendFile("index.html", { root: "./frontend" });
+});
 
 // API: postdata
 app.post("/postData", async function (req, res) {
   var jsonData = req.body;
 
   var data = await generateLink();
-  
+
   // add to db
   var newshare = new share({
     message: jsonData.msg,
     ttl: jsonData.ttl,
     type: jsonData.type,
     link: data,
+    username: jsonData.username,
   });
 
   newshare.save(function (err, kol) {
@@ -83,6 +91,70 @@ app.post("/postData", async function (req, res) {
   });
 });
 
+
+//api: homepage
+app.get("/share", function (req, res) {
+  res.render("homePage");
+});
+
+app.get("/loginPage", function (req, res) {
+  res.render("loginPage");
+});
+
+app.get("/registerPage", function (req, res) {
+  res.render("registerPage");
+});
+
+app.post("/register", function (req, res) {
+  var jsonData = req.body;
+
+  // add to db
+  var newUser = new user({
+    username: jsonData.username,
+    password: jsonData.password,
+    email: jsonData.email,
+  });
+
+  newUser.save(function (err, kol) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json({ status: "200" });
+    }
+  });
+});
+
+app.post("/login", function (req, res) {
+  var jsonData = req.body;
+
+  user.exists(
+    { username: jsonData.username, password: jsonData.password },
+    function (err, data) {
+      if (data) {
+        res.json({ status: "200" });
+      } else {
+        res.json({ status: "401" });
+      }
+    }
+  );
+});
+
+app.get("/dashboard/:username", async function (req, res) {
+  await user
+    .findOne({ username: req.params.username }, function (err, data) {})
+    .then((q) => {
+      share
+        .find({ username: req.params.username }, function (err, q) {})
+        .then((result) => {
+          console.log("OOPS");
+          console.log(result);
+          res.render("dashboard", {
+            username: req.params.username,
+            result: result,
+          });
+        });
+    });
+});
 
 // API :display message
 app.get("/:link", function (req, res) {
@@ -100,63 +172,64 @@ app.get("/:link", function (req, res) {
         console.log(seconds);
         let v = share.findOne(
           { $and: [{ link: req.params.link }, { ttl: { $gte: seconds } }] },
-            (err, result) => {
-                if(result){
-                    if(result.type == "message"){
-                        res.render("displayMessage", {message:result.message, type:result.type, status:200, time:result.ttl-seconds});
-                    }
-                    else{
-                        res.render("displayLink", {message:result.message, type:result.type, status:200, time:result.ttl-seconds});
-                    }
-                  
-                }
-                else{
-                  console.log("OOPS");
-                    res.render("pageNotFound");
-
-                }
+          (err, result) => {
+            if (result) {
+              if (result.type == "message") {
+                res.render("displayMessage", {
+                  message: result.message,
+                  type: result.type,
+                  status: 200,
+                  time: result.ttl - seconds,
+                });
+              } else {
+                res.render("displayLink", {
+                  message: result.message,
+                  type: result.type,
+                  status: 200,
+                  time: result.ttl - seconds,
+                });
+              }
+            } else {
+              console.log("Incorrect URL");
+              res.render("pageNotFound");
+            }
           }
         );
       });
-
-    }
-    else{
-      console.log("OOPS");
-        res.render("pageNotFound");
-
+    } else {
+      console.log("Incorrct URL");
+      res.render("pageNotFound");
     }
   });
 });
 
 // Add headers
 app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "https://shareapp-app.herokuapp.com/");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://shareapp-app.herokuapp.com/"
+  );
 
-  // Request methods you wish to allow
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
   );
 
-  // Request headers you wish to allow
   res.setHeader(
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type"
   );
 
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
   res.setHeader("Access-Control-Allow-Credentials", true);
 
-  // Pass to next layer of middleware
   next();
 });
 
-// app.listen(3000, "localhost", () => {
-//   console.log("Server is up");
-// });
 
-app.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+app.listen(process.env.PORT || 3000, function () {
+  console.log(
+    "Express server listening on port %d in %s mode",
+    this.address().port,
+    app.settings.env
+  );
 });
