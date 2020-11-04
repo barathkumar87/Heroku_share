@@ -50,15 +50,9 @@
         <tr>
           <th scope="row"><%= i+1 %></th>
           <td>
-            <%if (result[i]['type'] == "link") { %>
-                <a
-                href="https://shareapp-app.herokuapp.com/<%= result[i]['message'] %>"
-                >https://shareapp-app.herokuapp.com/<%= result[i]['message'] %></a
-              >
-                <% } %>  
-                else{ %>  
-                   <%= result[i]['message'] %>
-                 <% } %>
+           
+               <%= result[i]['message'] %>
+               
            </td>
 
           <td>
