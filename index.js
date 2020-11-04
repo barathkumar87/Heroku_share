@@ -63,7 +63,7 @@ async function generateLink() {
   return randiom;
 }
 
-app.get("/", function (req, res) {
+app.get("/share", function (req, res) {
   res.sendFile("index.html", { root: "./frontend" });
 });
 
@@ -93,7 +93,7 @@ app.post("/postData", async function (req, res) {
 
 
 //api: homepage
-app.get("/share", function (req, res) {
+app.get("/", function (req, res) {
   res.render("homePage");
 });
 
@@ -146,7 +146,7 @@ app.get("/dashboard/:username", async function (req, res) {
       share
         .find({ username: req.params.username }, function (err, q) {})
         .then((result) => {
-          console.log("OOPS");
+         
           console.log(result);
           res.render("dashboard", {
             username: req.params.username,
@@ -160,8 +160,7 @@ app.get("/dashboard/:username", async function (req, res) {
 app.get("/:link", function (req, res) {
   var got = eckIfLinkExist(req.params.link).then((data) => {
     if (data) {
-      console.log("HELO");
-
+     
       share.findOne({ link: req.params.link }, function (err, data) {
         var presentDate = new Date();
 
