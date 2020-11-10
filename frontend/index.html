@@ -1481,44 +1481,42 @@ function crcturl(string){
 	}
 	return true;
 }
-function submitForm(){
-	var form=document.querySelector('[data-form]');
-	var formData = new FormData(form);
-	var data={
-		msg:formData.get('message'),
-		ttl:formData.get('ttl'),
-		type:formData.get('type'),
-		username:sessionStorage.getItem("username")
-	};
-	if(!crcturl(data.msg) && data.type =="link"){
-		alert("Incorrect url link");
-return
-	}
-	if (!data.msg){
-		console.log('No'+data.type+'provided.');
-		return;
-	}
-	fetch('https://https://shareapp-app.herokuapp.com/postData',{
-		method:'POST',
-		header:{
-			'Content-Type':'application/json'
-		},
-		body:JSON.stringify(data),
-	})
-	.then(res=>res.json())
-	.then(q=>
-	      {
-		showModal(q.link)
-	}
-	      );
-}
-	
-        
+function submitForm() {
+        var form = document.querySelector('[data-form]');
+       
+        var formData = new FormData(form);
+        var data = {
+          msg: formData.get('message'),
+          ttl: formData.get('ttl'),
+          type: formData.get('type'),
     
-         
-         ) );
-      }
+          username: sessionStorage.getItem("username")
+        };
 
+    if(!crcturl(data.msg) && data.type == "link"){
+  alert("Incoorect url link");
+return
+}
+
+        if (!data.msg) {
+
+
+          console.log('No ' + data.type + ' provided.');
+          return;
+        }
+
+        fetch('https://shareapp-app.herokuapp.com/postData', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data),
+        })
+          .then(res=>res.json())
+          .then(q=>		{	showModal(q.link)
+		  }
+          );
+      }
 
 	</script>
 </body>
